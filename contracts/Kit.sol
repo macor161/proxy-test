@@ -60,7 +60,12 @@ contract Kit is KitBase {
         bytes32 votingAppId = apmNamehash("voting");
         bytes32 tokenManagerAppId = apmNamehash("token-manager");
 
-        DatastoreACL dacl1 = new DatastoreACL();
+
+        bytes32 daclId = apmNamehash("datastore-acl");
+        
+        // This line doesn't work
+        DatastoreACL dacl = DatastoreACL(dao.newAppInstance(daclId, latestVersionAppBase(daclId)));
+
         CounterApp app = CounterApp(dao.newAppInstance(appId, latestVersionAppBase(appId)));
         Voting voting = Voting(dao.newAppInstance(votingAppId, latestVersionAppBase(votingAppId)));
         TokenManager tokenManager = TokenManager(dao.newAppInstance(tokenManagerAppId, latestVersionAppBase(tokenManagerAppId)));
@@ -68,7 +73,7 @@ contract Kit is KitBase {
         MiniMeToken token = tokenFactory.createCloneToken(MiniMeToken(0), 0, "App token", 0, "APP", true);
         token.changeController(tokenManager);
 
-        app.initialize(dacl1);
+        app.initialize(dacl);
         tokenManager.initialize(token, true, 0, true);
         // Initialize apps
         voting.initialize(token, 50 * PCT, 20 * PCT, 1 days);
