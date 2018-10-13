@@ -2,7 +2,7 @@ pragma solidity ^0.4.24;
 
 import "@aragon/os/contracts/apps/AragonApp.sol";
 import "@aragon/os/contracts/lib/math/SafeMath.sol";
-import "./DatastoreACL.sol";
+import "../apps/datastore-acl/contracts/DatastoreACL.sol";
 
 contract CounterApp is AragonApp {
     using SafeMath for uint256;
@@ -32,8 +32,8 @@ contract CounterApp is AragonApp {
      */
     function increment(uint256 step) auth(INCREMENT_ROLE) external {
         uint t = datastoreACL.test();
-        value = value.add(step);
-        emit Increment(msg.sender, step);
+        value = value.add(t);
+        emit Increment(msg.sender, t);
     }
 
     /**
