@@ -67,14 +67,14 @@ contract Kit is KitBase {
         
         // This line doesn't work
         DatastoreACL dacl = DatastoreACL(dao.newAppInstance(daclId, latestVersionAppBase(daclId)));
-        //latestVersionAppBase(vaultId);
         dacl.initialize();
+        //latestVersionAppBase(vaultId);
 
                 
         CounterApp app = CounterApp(dao.newAppInstance(appId, latestVersionAppBase(appId)));
         Voting voting = Voting(dao.newAppInstance(votingAppId, latestVersionAppBase(votingAppId)));
 
-        app.initialize(dacl);
+        app.initialize();
         // Initialize apps
 
 

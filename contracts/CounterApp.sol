@@ -2,9 +2,11 @@ pragma solidity ^0.4.24;
 
 import "@aragon/os/contracts/apps/AragonApp.sol";
 import "@aragon/os/contracts/lib/math/SafeMath.sol";
+import "@aragon/os/contracts/kernel/KernelConstants.sol";
+import "@aragon/os/contracts/apm/APMNamehash.sol";
 import "../apps/datastore-acl/contracts/DatastoreACL.sol";
 
-contract CounterApp is AragonApp {
+contract CounterApp is AragonApp, APMNamehash {
     using SafeMath for uint256;
 
     /// Events
@@ -25,6 +27,14 @@ contract CounterApp is AragonApp {
 
         datastoreACL = DatastoreACL(_datastoreACL);
     }
+
+    function initialize() onlyInit public {
+        initialized();
+
+        address dAdd = kernel().getApp(KernelConstants.APP_BASES_NAMESPACE, apmNamehash("datastore-acl"));
+        require(dAdd != 0, "DatastoreACL address invalid");
+        datastoreACL = DatastoreACL(dAdd);
+    }    
 
     /**
      * @notice Increment the counter by `step`
